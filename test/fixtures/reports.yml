@@ -2,6 +2,8 @@
 
 one:
   name: Report One
+  income: 95.0
 
 two:
-  name: Report Two
+  name: Report One (clone)
+  income: 95.0

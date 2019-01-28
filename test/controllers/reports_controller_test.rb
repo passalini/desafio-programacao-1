@@ -9,6 +9,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
     get reports_url
     assert_response :success
     assert_select '#reports .report', count: 2
+    assert_select "#reports #report-#{@report.id} .income", text: '$95.00'
   end
 
   test "should get new" do
@@ -29,6 +30,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
     get report_url(@report)
     assert_response :success
     assert_select '#report_file', count: 0
+    assert_select '.income', '$95.00'
   end
 
   test "should get edit" do
