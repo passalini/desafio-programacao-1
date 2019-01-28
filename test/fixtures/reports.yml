@@ -3,6 +3,7 @@
 one:
   name: Report One
   income: 95.0
+  user: one
 
 two:
   name: Report One (clone)

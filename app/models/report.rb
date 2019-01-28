@@ -2,6 +2,7 @@ require 'csv'
 
 class Report < ApplicationRecord
   has_one_attached :file
+  belongs_to :user
 
   validates :name, presence: true
   validates_each :file, on: :create do |record, attr, value|

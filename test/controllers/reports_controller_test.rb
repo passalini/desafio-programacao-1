@@ -1,14 +1,17 @@
 require 'test_helper'
 
 class ReportsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @report = reports(:one)
+    sign_in users(:one), scope: :user
   end
 
   test "should get index" do
     get reports_url
     assert_response :success
-    assert_select '#reports .report', count: 2
+    assert_select '#reports .report', count: 1
     assert_select "#reports #report-#{@report.id} .income", text: '$95.00'
   end
 
