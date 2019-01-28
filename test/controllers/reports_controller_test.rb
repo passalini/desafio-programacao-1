@@ -11,7 +11,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     get reports_url
     assert_response :success
-    assert_select '#reports .report', count: 1
+    assert_select '#reports .report', count: 2
     assert_select "#reports #report-#{@report.id} .income", text: '$95.00'
   end
 

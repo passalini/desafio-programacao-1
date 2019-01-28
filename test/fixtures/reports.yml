@@ -6,5 +6,10 @@ one:
   user: one
 
 two:
-  name: Report One (clone)
-  income: 95.0
+  name: Report One (clone 1)
+  income: 105.0
+  user: one
+
+three:
+  name: Report One (clone 2)
+  income: 300.0

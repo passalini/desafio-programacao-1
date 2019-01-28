@@ -5,4 +5,6 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
-  email: 'a@a.a'
+  email: <%= ENV['FACEBOOK_USER_EMAIL'] || 'test@email.com' %>
+  provider: "facebook"
+  uid: <%= ENV['FACEBOOK_UID'] || '123123123' %>
