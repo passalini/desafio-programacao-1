@@ -1,6 +1,9 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Reports</h1>
+<h1>
+  Reports
+  <% if @reports.present? %> # total gross income: <span id="total-income"><%= number_to_currency @total_income %><span><% end %>
+</h1>
 
 <% if @reports.present? %>
   <table>

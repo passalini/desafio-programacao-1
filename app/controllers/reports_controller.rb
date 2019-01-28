@@ -5,6 +5,7 @@ class ReportsController < ApplicationController
   # GET /reports.json
   def index
     @reports = current_user.reports
+    @total_income = current_user.total_income
   end
 
   # GET /reports/1

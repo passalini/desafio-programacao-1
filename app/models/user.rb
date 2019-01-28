@@ -12,4 +12,8 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0,20]
     end
   end
+
+  def total_income
+    reports.reduce(0) { |total, r| total + r.income }
+  end
 end
