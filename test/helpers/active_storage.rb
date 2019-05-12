@@ -12,10 +12,12 @@ class ActiveSupport::TestCase
   include Helpers::ActiveStorage
 
   def remove_uploaded_files
-    FileUtils.rm_rf("#{Rails.root}/tmp/storage/")
+    path = "#{Rails.root}/tmp/storage/**/*"
+    files = Dir[path].reject { |a| a.include?('/8A') }
+    FileUtils.rm_rf(files)
   end
 
-  def teardown
+  def after_teardown
     super
     remove_uploaded_files
   end

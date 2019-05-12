@@ -38,7 +38,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update report" do
-    patch report_url(@report), params: { report: { name: @report.name } }
+    patch report_url(@report), params: { report: { name: 'name' } }
     assert_redirected_to report_url(@report)
   end
 
