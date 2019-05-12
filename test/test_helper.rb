@@ -8,3 +8,5 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 end
+
+Dir[Rails.root.join('test/helpers/**/*.rb')].each { |f| require f }
