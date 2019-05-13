@@ -1,5 +1,5 @@
 one:
-  key: <%= Rails.env.test? ? "8AAEPQ9G3HrsyCpEzEfgzTcR" : "anGxdBWpAc2Cm3VGxGeLrHeP" %>
+  key: "8AAEPQ9G3HrsyCpEzEfgzTcR"
   filename: "example_input.tab"
   content_type: "application/octet-stream"
   byte_size: 381

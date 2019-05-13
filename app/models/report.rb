@@ -10,8 +10,7 @@ class Report < ApplicationRecord
     record.errors.add(attr, :invalid) unless valid_report?(value)
   end
 
-  # TODO: skip it when updating only name
-  before_save :process_file
+  before_save :process_file, if: :should_process?
 
   private
 
@@ -38,5 +37,16 @@ class Report < ApplicationRecord
     csv.each do |row|
       self.income += row["item price"].to_f * row["purchase count"].to_f
     end
+  end
+
+  private
+
+  def should_process?
+    return unless file.attached?
+
+    new_file = @file_key_was ? (@file_key_was != file.key) : true
+
+    @file_key_was = file.key
+    new_file
   end
 end

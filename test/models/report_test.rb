@@ -24,9 +24,9 @@ class ReportTest < ActiveSupport::TestCase
     report_1.file.attach(io: file_fixture(file_1).open, filename: file_1)
     report_2.file.attach(io: file_fixture(file_2).open, filename: file_1)
 
-    assert     report_1.valid?
+    assert report_1.valid?
     assert_not report_2.valid?
-    assert_includes report_2.errors.messages[:file], "is invalid"
+    assert_includes report_2.errors.messages[:file], 'is invalid'
   end
 
   test '#process_file' do
@@ -38,8 +38,11 @@ class ReportTest < ActiveSupport::TestCase
     assert report_1.save
     assert_equal 95.0, report_1.income
 
-    report_1.file.attach(io: file_fixture(file_2).open, filename: file_2)
+    report_1.reload.file.attach(io: file_fixture(file_2).open, filename: file_2)
     assert report_1.save
     assert_equal 105.0, report_1.income
+
+    report_1.expects(:process_file).never
+    report_1.update!(name: 'new name')
   end
 end
