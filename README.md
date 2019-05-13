@@ -1,4 +1,4 @@
-#​​ foobar-importer
+# foobar-importer
 This importer will give you the total gross income from your reports. You just need to sign-in as you like, **oauth with facebook included**, and create a new report with a file of TAB-separated files, with the following columns:
   - purchaser name
   - item description
