@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>FoobarImporter</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -9,11 +11,35 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <% if current_user %>
-      <%= "Welcome! #{current_user.email}" %>
-      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
-    <% end %>
-    <%= yield %>
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <div class="collapse navbar-collapse" id="navbarsExample07">
+            <a class="navbar-brand mr-auto" href="/">FoobarImporter</a>
+
+            <% if current_user %>
+              <ul class="navbar-nav my-9 my-md-0">
+                <li class="nav-item dropdown active">
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <%= "Welcome! #{current_user.email}" %>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdown06">
+                    <%= link_to('Logout', destroy_user_session_path, method: :delete, class: 'dropdown-item') %>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </li>
+              </ul>
+            <% end %>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main role="main" class="flex-shrink-0">
+      <div class="container">
+        <%= yield %>
+      </div>
+    </main>
   </body>
 </html>
