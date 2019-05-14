@@ -12,6 +12,7 @@ class Report < ApplicationRecord
 
   # TODO: process em background
   before_save :process_file, if: :should_process?
+  after_commit -> { user.calculate_income! }, if: :saved_change_to_income?
 
   private
 
@@ -31,7 +32,7 @@ class Report < ApplicationRecord
   end
 
   def process_file
-    return unless self.file.attached?
+    return unless file.attached?
     csv = self.class.buid_csv(file)
 
     self.income = 0

@@ -2,7 +2,7 @@
   <% if @reports.present? %>
     <h1 class="display-4">Income</h1>
     <p class="lead">
-      <span id="total-income"><%= number_to_currency @total_income %><span>
+      <span id="total-income"><%= number_to_currency current_user.income %><span>
     </p>
   <% else %>
     <h1 class="display-4">You still don't have reports!</h1>
@@ -11,6 +11,7 @@
   <%= link_to 'New Report', new_report_path, class: 'btn btn-primary my-2' %>
 </div>
 
+<%# TODO: colocar apenas 3 por linha %>
 <div class="container text-center">
   <% if @reports.present? %>
     <div id="reports"  class="js-reports card-deck mb-3">

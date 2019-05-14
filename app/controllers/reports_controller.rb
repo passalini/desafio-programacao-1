@@ -6,7 +6,6 @@ class ReportsController < ApplicationController
   # GET /reports.json
   def index
     @reports = paginate(current_user.reports.order(created_at: :desc))
-    @total_income = current_user.total_income
   end
 
   # GET /reports/1

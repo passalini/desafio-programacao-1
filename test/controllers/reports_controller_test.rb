@@ -32,7 +32,9 @@ class ReportsControllerTest < ActionController::TestCase
 
   test '#create' do
     assert_difference('@user.reports.count') do
-      post :create, params: { report: { name: @report_1.name, file: fixture_file_upload(file_fixture('example_input.tab')) } }
+      assert_difference('@user.reload.income', 95) do
+        post :create, params: { report: { name: @report_1.name, file: fixture_file_upload(file_fixture('example_input.tab')) } }
+      end
     end
 
     assert_redirected_to report_url(Report.last)

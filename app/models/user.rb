@@ -13,8 +13,8 @@ class User < ApplicationRecord
     end
   end
 
-  # TODO: criar attr no db
-  def total_income
-    reports.reduce(0) { |total, r| total + r.income }
+  def calculate_income!
+    self.income = reports.reduce(0) { |total, r| total + r.income }
+    save
   end
 end
