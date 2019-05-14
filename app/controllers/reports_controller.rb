@@ -11,6 +11,7 @@ class ReportsController < ApplicationController
   # GET /reports/1
   # GET /reports/1.json
   def show
+    @csv = Report.buid_csv(@report.file)
   end
 
   # GET /reports/new

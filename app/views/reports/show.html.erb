@@ -1,14 +1,30 @@
-<p id="notice"><%= notice %></p>
+<div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <h1 class="display-4"><%= @report.name %></h1>
 
-<p>
-  <strong>Name:</strong>
-  <%= @report.name %>
-</p>
+  <p class="lead">
+    <span class="income"><%= number_to_currency @report.income %><span>
+  </p>
 
-<p>
-  <strong>Income:</strong>
-  <span class="income"><%= number_to_currency @report.income %></span>
-</p>
+  <%= link_to 'Edit', edit_report_path(@report), class: 'btn btn-primary my-2' %>
+</div>
 
-<%= link_to 'Edit', edit_report_path(@report) %> |
-<%= link_to 'Back', reports_path %>
+<div class="container">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <% @csv.headers.each do |header| %>
+          <th scope="col"><%= header %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @csv.each do |row| %>
+        <tr>
+          <% @csv.headers.each do |header| %>
+            <td><%= row[header] %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

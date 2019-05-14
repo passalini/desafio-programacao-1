@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="container devise-views text-center">
   <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-signin' }) do |f| %>
     <%- resource_class.omniauth_providers.each do |provider| %>
       <a class="btn btn-lg btn-social btn-facebook btn-block" href="<%= omniauth_authorize_path(resource_name, provider) %>">
