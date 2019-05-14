@@ -1,15 +1,18 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  created_at: <%= Time.now - 3.day %>
   name: Report One
   income: 95.0
   user: one
 
 two:
+  created_at: <%= Time.now - 2.day %>
   name: Report One (clone 1)
   income: 105.0
   user: one
 
 three:
+  created_at: <%= Time.now - 1.day %>
   name: Report One (clone 2)
   income: 300.0

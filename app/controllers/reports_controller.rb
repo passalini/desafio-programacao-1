@@ -1,10 +1,12 @@
 class ReportsController < ApplicationController
+  include Pagination
   before_action :set_report, only: [:show, :edit, :update, :destroy]
 
   # GET /reports
   # GET /reports.json
   def index
-    @reports = current_user.reports
+    # TODO: criar paginação (remota)
+    @reports = paginate(current_user.reports.order(created_at: :desc))
     @total_income = current_user.total_income
   end
 
@@ -64,13 +66,14 @@ class ReportsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_report
-      @report = current_user.reports.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def report_params
-      params.require(:report).permit(:name, :file)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_report
+    @report = current_user.reports.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def report_params
+    params.require(:report).permit(:name, :file)
+  end
 end

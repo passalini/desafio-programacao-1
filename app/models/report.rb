@@ -10,6 +10,7 @@ class Report < ApplicationRecord
     record.errors.add(attr, :invalid) unless valid_report?(value)
   end
 
+  # TODO: process em background
   before_save :process_file, if: :should_process?
 
   private
