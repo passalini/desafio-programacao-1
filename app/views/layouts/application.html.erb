@@ -17,7 +17,12 @@
     </header>
 
     <main role="main" class="flex-shrink-0">
-      <p id="notice"><%= notice %></p>
+      <% flash.each do |key, value| %>
+        <div class="<%= flash_class(key) %> text-center">
+          <%= value %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
   </body>

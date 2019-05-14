@@ -5,7 +5,6 @@ class ReportsController < ApplicationController
   # GET /reports
   # GET /reports.json
   def index
-    # TODO: criar paginação (remota)
     @reports = paginate(current_user.reports.order(created_at: :desc))
     @total_income = current_user.total_income
   end

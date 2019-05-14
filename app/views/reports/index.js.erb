@@ -1,0 +1,7 @@
+<% if @more_link %>
+  $('#js-more-reports').attr('href', '<%= @more_link %>');
+<% else %>
+  $('#js-more-reports').remove();
+<% end %>
+
+$('#reports.js-reports').append('<%= j render(@reports) %>');

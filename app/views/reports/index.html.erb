@@ -11,26 +11,17 @@
   <%= link_to 'New Report', new_report_path, class: 'btn btn-primary my-2' %>
 </div>
 
-<div class="container">
+<div class="container text-center">
   <% if @reports.present? %>
-    <div id="reports"  class="card-deck mb-3 text-center">
-      <% @reports.each do |report| %>
-        <div id="report-<%= report.id %>" class="report card mb-4 shadow-sm">
-          <div class="card-header">
-            <h4 class="my-0 font-weight-normal"><%= report.name %></h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title income"><%= number_to_currency(report.income) %></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li><%= link_to 'Download', url_for(report.file) %></li>
-              <li><%= link_to 'Edit', edit_report_path(report) %></li>
-              <li><%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %></li>
-            </ul>
-            <%= link_to 'Show', report_path(report), class: "btn btn-lg btn-block btn-outline-primary" %>
-          </div>
-        </div>
-      <% end %>
+    <div id="reports"  class="js-reports card-deck mb-3">
+      <%= render @reports %>
     </div>
+
+    <% if @more_link %>
+      <%= link_to @more_link, id: 'js-more-reports', class: 'btn btn-outline-primary', remote: true do %>
+        Load more
+      <% end %>
+    <% end %>
   <% end %>
 
   <footer class="pt-4 my-md-5 pt-md-5 border-top">
