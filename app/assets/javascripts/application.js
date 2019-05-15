@@ -18,6 +18,9 @@
 //= require popper
 //= require bootstrap
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+// The app is too fast, this is just to show the bar!
+Turbolinks.setProgressBarDelay(50);
+
+document.addEventListener("turbolinks:load", function() {
+    $('[data-toggle="tooltip"]').tooltip();
 })
