@@ -306,6 +306,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.11)
   rails (~> 5.2.2)
+  redis (~> 4.0)
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq (~> 5.2.7)
