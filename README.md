@@ -16,17 +16,23 @@ First you need to check and install the core dependences:
   - ruby 2.5.1
   - bunbler
 
-After that you need to install the project dependences and create the db:
+After that you need to install the project dependences, create the db and set the env variables:
 
-`bundle install && rails db:setup`
+```shell
+bundle install && rails db:setup
 
-and run the sidekiq service:
+# If you want to use the Facebook login you need to run the server with ID and SECRET
+export FACEBOOK_APP_ID='YOUR_ID'
+export FACEBOOK_APP_SECRET='YOUR_SECRET'
+export REDIS_URL='redis://localhost:6379/0/cache'
+```
 
-`sidekiq -d -L log/sidekiq.log -e development`
+To run the server app you need to run the sidekiq service:
 
-If you want to use the Facebook login you need to run the server with ID and SECRET:
-
-`FACEBOOK_APP_ID=YOUR_ID FACEBOOK_APP_SECRET=YOUR_SECRET rails s`
+```shell
+sidekiq -d -L log/sidekiq.log -e development
+rails s
+```
 
 To run the tests:
 
