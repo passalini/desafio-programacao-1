@@ -12,6 +12,7 @@ class Report < ApplicationRecord
     record.errors.add(attr, :invalid) unless valid_report?(value)
   end
 
+  after_commit :broadcast_creation, on: :create
   after_commit :process_file_in_background, if: :should_process?
   after_commit -> { user.calculate_income! }, if: :saved_change_to_income?
 
@@ -60,5 +61,10 @@ class Report < ApplicationRecord
 
   def process_file_in_background
     ProcessReportJob.perform_later(self)
+  end
+
+  def broadcast_creation
+    ActionCable.server.broadcast 'report_notifications_channel',
+      report: ViewHelper.render(self)
   end
 end
