@@ -1,6 +1,8 @@
 require 'csv'
 
 class Report < ApplicationRecord
+  include AASM
+
   has_one_attached :file
   belongs_to :user
 
@@ -10,11 +12,21 @@ class Report < ApplicationRecord
     record.errors.add(attr, :invalid) unless valid_report?(value)
   end
 
-  # TODO: process em background
-  before_save :process_file, if: :should_process?
+  after_commit :process_file_in_background, if: :should_process?
   after_commit -> { user.calculate_income! }, if: :saved_change_to_income?
 
-  private
+  aasm do
+    state :processing, initial: true
+    state :done
+
+    event :process do
+      transitions to: :processing
+    end
+
+    event :finish_porcessing, before: :calculate_income do
+      transitions to: :done
+    end
+  end
 
   def self.valid_report?(report_file)
     return true unless report_file.attached?
@@ -31,8 +43,7 @@ class Report < ApplicationRecord
     CSV.read(path, headers: true, col_sep: "\t")
   end
 
-  def process_file
-    return unless file.attached?
+  def calculate_income
     csv = self.class.buid_csv(file)
 
     self.income = 0
@@ -44,11 +55,10 @@ class Report < ApplicationRecord
   private
 
   def should_process?
-    return unless file.attached?
+    file.attached? && file.saved_change_to_blob_id? && process
+  end
 
-    new_file = @file_key_was ? (@file_key_was != file.key) : true
-
-    @file_key_was = file.key
-    new_file
+  def process_file_in_background
+    ProcessReportJob.perform_later(self)
   end
 end

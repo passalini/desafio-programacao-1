@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ReportsControllerTest < ActionController::TestCase
+  include ActiveJob::TestHelper
+
   setup do
     @report_1 = reports(:one)
     @report_2 = reports(:two)
@@ -32,7 +34,7 @@ class ReportsControllerTest < ActionController::TestCase
 
   test '#create' do
     assert_difference('@user.reports.count') do
-      assert_difference('@user.reload.income', 95) do
+      assert_enqueued_with(job: ProcessReportJob) do
         post :create, params: { report: { name: @report_1.name, file: fixture_file_upload(file_fixture('example_input.tab')) } }
       end
     end
