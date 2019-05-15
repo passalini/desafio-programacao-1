@@ -7,6 +7,7 @@ class ReportsControllerTest < ActionController::TestCase
     @report_1 = reports(:one)
     @report_2 = reports(:two)
     @report_3 = reports(:three)
+    @report_4 = reports(:four)
     @user     = users(:one)
     sign_in @user, scope: :user
   end
@@ -15,9 +16,11 @@ class ReportsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_select '#total-income', '$200.00'
-    assert_select '#reports .report', count: 2
-    assert_select "#reports #report-#{@report_1.id} .income", text: '$95.00'
+    assert_select '#reports .report', count: @user.reports.count
+    assert_select "#reports #report-#{@report_1.id} .income", text: '-'
     assert_select "#reports #report-#{@report_2.id} .income", text: '$105.00'
+    assert_select "#reports #report-#{@report_3.id}", count: 0
+    assert_select "#reports #report-#{@report_4.id} .income", text: '$95.00'
 
     get :index, params: { per_page: 1, page: 1 }
     assert_response :success
@@ -46,7 +49,11 @@ class ReportsControllerTest < ActionController::TestCase
     get :show, params: { id: @report_1 }
     assert_response :success
     assert_select '#report_file', count: 0
-    assert_select '.income', '$95.00'
+    assert_select '.income', 'Your report is still processing...'
+
+    get :show, params: { id: @report_2 }
+    assert_response :success
+    assert_select '.income', '$105.00'
 
     assert_raises(ActiveRecord::RecordNotFound) {
       get :show, params: { id: @report_3 }

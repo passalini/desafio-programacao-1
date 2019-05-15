@@ -2,7 +2,13 @@
   <h1 class="display-4"><%= @report.name %></h1>
 
   <p class="lead">
-    <span class="income"><%= number_to_currency @report.income %><span>
+    <span class="income">
+      <% if @report.processing? %>
+        Your report is still processing...
+      <% else %>
+        <%= number_to_currency @report.income %>
+      <% end %>
+    <span>
   </p>
 
   <%= link_to 'Edit', edit_report_path(@report), class: 'btn btn-primary my-2' %>

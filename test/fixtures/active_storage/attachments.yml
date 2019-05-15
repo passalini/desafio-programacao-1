@@ -7,3 +7,8 @@ two:
   name: file
   record: two (Report)
   blob: one
+
+four:
+  name: file
+  record: four (Report)
+  blob: one

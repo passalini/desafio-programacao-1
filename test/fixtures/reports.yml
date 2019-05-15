@@ -5,14 +5,23 @@ one:
   name: Report One
   income: 95.0
   user: one
+  aasm_state: processing
 
 two:
   created_at: <%= Time.now - 2.day %>
-  name: Report One (clone 1)
+  name: Report two
   income: 105.0
   user: one
+  aasm_state: done
 
 three:
   created_at: <%= Time.now - 1.day %>
-  name: Report One (clone 2)
+  name: Report three
   income: 300.0
+
+four:
+  created_at: <%= Time.now - 4.day %>
+  name: Report four
+  income: 95.0
+  user: one
+  aasm_state: done

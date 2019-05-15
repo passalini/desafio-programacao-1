@@ -14,7 +14,7 @@ class User < ApplicationRecord
   end
 
   def calculate_income!
-    self.income = reports.reduce(0) { |total, r| total + r.income }
+    self.income = reports.done.reduce(0) { |total, r| total + r.income }
     save
   end
 end
