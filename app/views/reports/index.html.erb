@@ -11,12 +11,22 @@
   <%= link_to 'New Report', new_report_path, class: 'btn btn-primary my-2' %>
 </div>
 
-<%# TODO: colocar apenas 3 por linha %>
 <div class="container text-center">
   <% if @reports.present? %>
-    <div id="reports"  class="js-reports card-deck mb-3">
-      <%= render @reports %>
-    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Income</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody id="reports" class="js-reports">
+        <%= render @reports %>
+      </tbody>
+    </table>
 
     <% if @more_link %>
       <%= link_to @more_link, id: 'js-more-reports', class: 'btn btn-outline-primary', remote: true do %>
