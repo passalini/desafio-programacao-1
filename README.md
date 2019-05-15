@@ -11,13 +11,18 @@ Your file needs to have a first line with the coloumns above, but you can put in
 
 # How to run
 First you need to check and install the core dependences:
+  - redis
   - postgresql
   - ruby 2.5.1
   - bunbler
 
 After that you need to install the project dependences and create the db:
 
-`bundle install && rails db:create db:migrate`
+`bundle install && rails db:setup`
+
+and run the sidekiq service:
+
+`sidekiq -d -L log/sidekiq.log -e development`
 
 If you want to use the Facebook login you need to run the server with ID and SECRET:
 
