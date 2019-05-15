@@ -5,7 +5,8 @@ class ReportsController < ApplicationController
   # GET /reports
   # GET /reports.json
   def index
-    @reports = paginate(current_user.reports.order(created_at: :desc))
+    @reports = paginate(current_user.reports.includes(file_attachment: :blob).
+      order(created_at: :desc))
   end
 
   # GET /reports/1
