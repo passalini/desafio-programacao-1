@@ -9,6 +9,13 @@ This importer will give you the total gross income from your reports. You just n
 
 Your file needs to have a first line with the coloumns above, but you can put in any order. With you want to use other order, remember to use the same order in the other lines!
 
+## Features
+  - login with Facebook
+  - process report in background
+  - remote report income refresh at index and show
+  - remote report insertion at index
+  - remote pagination
+
 # How to run
 First you need to check and install the core dependences:
   - redis
