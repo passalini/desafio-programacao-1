@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_15_010706) do
+ActiveRecord::Schema.define(version: 2019_05_16_005859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,49 @@ ActiveRecord::Schema.define(version: 2019_05_15_010706) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.float "price"
+    t.bigint "user_id"
+    t.bigint "merchant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["merchant_id"], name: "index_items_on_merchant_id"
+    t.index ["user_id"], name: "index_items_on_user_id"
+  end
+
+  create_table "merchants", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_merchants_on_user_id"
+  end
+
+  create_table "purchasers", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_purchasers_on_user_id"
+  end
+
+  create_table "purchases", force: :cascade do |t|
+    t.integer "count"
+    t.bigint "purchaser_id"
+    t.bigint "item_id"
+    t.bigint "user_id"
+    t.bigint "report_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_purchases_on_item_id"
+    t.index ["purchaser_id"], name: "index_purchases_on_purchaser_id"
+    t.index ["report_id"], name: "index_purchases_on_report_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
   end
 
   create_table "reports", force: :cascade do |t|
@@ -63,5 +106,13 @@ ActiveRecord::Schema.define(version: 2019_05_15_010706) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "items", "merchants"
+  add_foreign_key "items", "users"
+  add_foreign_key "merchants", "users"
+  add_foreign_key "purchasers", "users"
+  add_foreign_key "purchases", "items"
+  add_foreign_key "purchases", "purchasers"
+  add_foreign_key "purchases", "reports"
+  add_foreign_key "purchases", "users"
   add_foreign_key "reports", "users"
 end
