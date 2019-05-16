@@ -5,6 +5,7 @@ class Report < ApplicationRecord
 
   has_one_attached :file
   belongs_to :user
+  has_many :purchases
 
   validates :name, presence: true
   validates_each :file, on: :create do |record, attr, value|
@@ -20,11 +21,11 @@ class Report < ApplicationRecord
     state :processing, initial: true
     state :done
 
-    event :process do
+    event :process, after: :clean_purchases! do
       transitions to: :processing
     end
 
-    event :finish_porcessing, before: :calculate_income do
+    event :finish_porcessing, before: :process_file! do
       transitions to: :done
     end
   end
@@ -44,19 +45,14 @@ class Report < ApplicationRecord
     CSV.read(path, headers: true, col_sep: "\t")
   end
 
-  def calculate_income
-    csv = self.class.buid_csv(file)
-
-    self.income = 0
-    csv.each do |row|
-      self.income += row["item price"].to_f * row["purchase count"].to_f
-    end
-  end
-
   private
 
   def should_process?
-    file.attached? && file.saved_change_to_blob_id? && process
+    new_file? && process
+  end
+
+  def new_file?
+    file.attached? && file.saved_change_to_blob_id?
   end
 
   def process_file_in_background
@@ -66,5 +62,32 @@ class Report < ApplicationRecord
   def broadcast_creation
     ActionCable.server.broadcast 'report_notifications_channel',
       report: ViewHelper.render(self)
+  end
+
+  def clean_purchases!
+    purchases.destroy_all
+  end
+
+  def process_file!
+    csv = self.class.buid_csv(file)
+    self.income = 0
+
+    csv.each do |row|
+      merchant = user.merchants.find_or_create_by(name: row['merchant name']) do |merchant|
+        merchant.address = row['merchant address']
+      end
+
+      purchaser = user.purchasers.find_or_create_by(name: row['purchaser name'])
+
+      item = user.items.find_or_create_by(name: row['item description'], merchant: merchant) do |item|
+        item.price = row['item price'].to_f
+      end
+
+      purchase = user.purchases.find_or_create_by(report: self, purchaser: purchaser, item: item) do |purchase|
+        purchase.count = row['purchase count'].to_i
+      end
+
+      self.income += purchase.count * item.price
+    end
   end
 end
