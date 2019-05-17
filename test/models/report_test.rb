@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ReportTest < ActiveSupport::TestCase
+  include ActionCable::TestHelper
+
   setup do
     @user = users(:one)
   end
@@ -29,7 +31,7 @@ class ReportTest < ActiveSupport::TestCase
     assert_includes report_2.errors.messages[:file], 'is invalid'
   end
 
-  test '#finish_porcessing' do
+  test '#process' do
     Sidekiq::Testing.inline!
     file_1    = 'example_input.tab'
     file_2    = 'example_2_input.tab'
@@ -49,7 +51,7 @@ class ReportTest < ActiveSupport::TestCase
     assert report_1.reload.done?
     assert_equal 95.0, report_1.income
     assert_equal 295.0, @user.reload.income
-
+    assert_broadcasts 'report_notifications_channel', 3 # changing total income, changing report and create report
 
     report_1.expects(:process_file_in_background).never
     report_1.update!(name: 'new name')
