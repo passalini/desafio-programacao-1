@@ -8,5 +8,5 @@ one:
   email: <%= ENV['FACEBOOK_USER_EMAIL'] || 'test@email.com' %>
   provider: "facebook"
   uid: <%= ENV['FACEBOOK_UID'] || '123123123' %>
-  income: 200.0
+  income: 295.0
   encrypted_password: <%= User.new.send(:password_digest, '123456') %>
