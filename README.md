@@ -11,10 +11,10 @@ Your file needs to have a first line with the coloumns above, but you can put in
 
 ## Features
   - login with Facebook
-  - process report in background
-  - remote report income refresh at index and show
-  - remote report insertion at index
-  - remote pagination
+  - process report in background (ActiveJob + Sidekiq)
+  - remote report income refresh at index and show (ActionCable)
+  - remote report insertion at index (ActionCable)
+  - remote pagination (Ajax)
 
 # How to run
 First you need to check and install the core dependences:
