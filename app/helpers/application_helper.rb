@@ -24,4 +24,8 @@ module ApplicationHelper
     return '-' unless report.done?
     number_to_currency(report.income)
   end
+
+  def shoud_show_back?
+    ![root_path, reports_path].include?(request.path) && !devise_controller?
+  end
 end

@@ -22,7 +22,9 @@
           <%= value %>
         </div>
       <% end %>
-
+      <div class="container">
+        <%= link_to('Back', :back, class: 'btn btn-secondary') if shoud_show_back? %>
+      </div>
       <%= yield %>
     </main>
   </body>
