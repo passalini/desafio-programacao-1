@@ -11,7 +11,7 @@ module ApplicationHelper
   def html_report_state(report)
     icon =
       case report.aasm_state
-      when 'processing' then 'clock-o'
+      when 'enqueued' then 'clock-o'
       when 'done' then 'check-circle'
       end
 

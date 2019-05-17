@@ -3,10 +3,10 @@
 
   <p class="lead">
     <span class="income">
-      <% if @report.processing? %>
-        Your report is still processing...
-      <% else %>
+      <% if @report.done? %>
         <%= number_to_currency @report.income %>
+      <% else %>
+        Your report is still processing...
       <% end %>
     <span>
   </p>

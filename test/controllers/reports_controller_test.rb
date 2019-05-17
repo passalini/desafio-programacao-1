@@ -38,7 +38,12 @@ class ReportsControllerTest < ActionController::TestCase
   test '#create' do
     assert_difference('@user.reports.count') do
       assert_enqueued_with(job: ProcessReportJob) do
-        post :create, params: { report: { name: @report_1.name, file: fixture_file_upload(file_fixture('example_input.tab')) } }
+        post :create, params: {
+          report: {
+            name: @report_1.name,
+            file: fixture_file_upload(file_fixture('example_input.tab'))
+          }
+        }
       end
     end
 
@@ -63,16 +68,24 @@ class ReportsControllerTest < ActionController::TestCase
   test '#edit only reports from user' do
     get :edit, params: { id: @report_1 }
     assert_response :success
-    assert_select '#report_file', count: 1
+    assert_select '#report_file', count: 0
 
     assert_raises(ActiveRecord::RecordNotFound) {
       get :edit, params: { id: @report_3 }
     }
   end
 
-  test '#update only reports from user' do
-    patch :update, params: { id: @report_1, report: { name: 'name' } }
-    assert_redirected_to report_url(@report_1)
+  test '#update only name and reports from user' do
+    assert_no_difference('@report_1.reload.file.blob_id') do
+      patch :update, params: {
+        id: @report_1,
+        report: {
+          name: 'name',
+          file: fixture_file_upload(file_fixture('example_2_input.tab'))
+        }
+      }
+      assert_redirected_to report_url(@report_1)
+    end
 
     assert_raises(ActiveRecord::RecordNotFound) {
       patch :update, params: { id: @report_3, report: { name: 'name' } }

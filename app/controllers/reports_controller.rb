@@ -3,14 +3,12 @@ class ReportsController < ApplicationController
   before_action :set_report, only: [:show, :edit, :update, :destroy]
 
   # GET /reports
-  # GET /reports.json
   def index
     @reports = paginate(current_user.reports.includes(file_attachment: :blob).
       order(created_at: :desc))
   end
 
   # GET /reports/1
-  # GET /reports/1.json
   def show
     @csv = Report.buid_csv(@report.file)
   end
@@ -25,43 +23,29 @@ class ReportsController < ApplicationController
   end
 
   # POST /reports
-  # POST /reports.json
   def create
-    @report = current_user.reports.new(report_params)
+    @report = current_user.reports.new(create_params)
 
-    respond_to do |format|
-      if @report.save
-        format.html { redirect_to @report, notice: 'Report was successfully created.' }
-        format.json { render :show, status: :created, location: @report }
-      else
-        format.html { render :new }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
-      end
+    if @report.save
+      redirect_to @report, notice: 'Report was successfully created.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /reports/1
-  # PATCH/PUT /reports/1.json
   def update
-    respond_to do |format|
-      if @report.update(report_params)
-        format.html { redirect_to @report, notice: 'Report was successfully updated.' }
-        format.json { render :show, status: :ok, location: @report }
-      else
-        format.html { render :edit }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
-      end
+    if @report.update(update_params)
+      redirect_to @report, notice: 'Report was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /reports/1
-  # DELETE /reports/1.json
   def destroy
     @report.destroy
-    respond_to do |format|
-      format.html { redirect_to reports_url, notice: 'Report was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to reports_url, notice: 'Report was successfully destroyed.'
   end
 
   private
@@ -72,7 +56,11 @@ class ReportsController < ApplicationController
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-  def report_params
+  def create_params
     params.require(:report).permit(:name, :file)
+  end
+
+  def update_params
+    params.require(:report).permit(:name)
   end
 end

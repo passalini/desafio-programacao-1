@@ -12,20 +12,21 @@ class Report < ApplicationRecord
     record.errors.add(attr, :blank) unless value.attached?
     record.errors.add(attr, :invalid) unless valid_report?(value)
   end
+  validates_each :file do |record, attr, value|
+    if !record.new_record? && record.send(:new_file?)
+      record.errors.add(attr, :invalid, message: 'should be blank')
+    end
+  end
 
   after_commit :broadcast_creation, on: :create
-  after_commit :process_file_in_background, if: :should_process?
+  after_commit :process_file_in_background, if: :new_file?, on: :create
   after_commit -> { user.calculate_income! }, if: :saved_change_to_income?
 
   aasm do
-    state :processing, initial: true
+    state :enqueued, initial: true
     state :done
 
-    event :process, after: :clean_purchases! do
-      transitions to: :processing
-    end
-
-    event :finish_porcessing, before: :process_file! do
+    event :process, before: :process_file! do
       transitions to: :done
     end
   end
@@ -46,10 +47,6 @@ class Report < ApplicationRecord
   end
 
   private
-
-  def should_process?
-    new_file? && process
-  end
 
   def new_file?
     file.attached? && file.saved_change_to_blob_id?

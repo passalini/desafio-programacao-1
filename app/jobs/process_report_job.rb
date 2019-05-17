@@ -2,7 +2,7 @@ class ProcessReportJob < ApplicationJob
   queue_as :default
 
   def perform(report)
-    report.finish_porcessing!
+    report.process!
     send_notifications_from(report)
   end
 
