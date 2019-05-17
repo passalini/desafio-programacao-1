@@ -94,7 +94,9 @@ class ReportsControllerTest < ActionController::TestCase
 
   test '#destroy only reports from user' do
     assert_difference('@user.reports.count', -1) do
-      delete :destroy, params: { id: @report_1 }
+      assert_difference('@user.reload.income', -95) do
+        delete :destroy, params: { id: @report_1 }
+      end
     end
 
     assert_redirected_to reports_url

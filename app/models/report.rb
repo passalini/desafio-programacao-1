@@ -5,7 +5,7 @@ class Report < ApplicationRecord
 
   has_one_attached :file
   belongs_to :user
-  has_many :purchases
+  has_many :purchases, dependent: :destroy
 
   validates :name, presence: true
   validates_each :file, on: :create do |record, attr, value|
@@ -20,7 +20,7 @@ class Report < ApplicationRecord
 
   after_commit :broadcast_creation, on: :create
   after_commit :process_file_in_background, if: :new_file?, on: :create
-  after_commit -> { user.calculate_income! }, if: :saved_change_to_income?
+  after_commit -> { user.calculate_income! }, if: -> { saved_change_to_income? || destroyed? }
 
   aasm do
     state :enqueued, initial: true
